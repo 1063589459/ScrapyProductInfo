@@ -223,11 +223,15 @@ namespace ScrapyProductInfo
         }
 
         [WebMethod]
-        public static int DownloadDetail(string folder, string goodsNo)
+        public static string DownloadDetail(string folder, string goodsNo)
         {
-            int iResult = 0;
+            string iResult = "0";
             try
             {
+                if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(goodsNo))
+                {
+                    return "-1";
+                }
                 string strDetail = GetDaRunFaDetails(goodsNo);
                 string details = GetDaRunFaDetails(goodsNo);
                 var detailResult = Newtonsoft.Json.JsonConvert.DeserializeObject<Darunfa_SearchResult<Darunfa_ProductInfo_Detail_Body>>(details);
@@ -240,10 +244,11 @@ namespace ScrapyProductInfo
                     }
 
                 }
+                iResult = "1";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                return ex.ToString();
             }
             return iResult;
         }

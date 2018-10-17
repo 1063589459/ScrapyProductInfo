@@ -6,13 +6,15 @@
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
 </head>
 <body>
    <form id="form1" runat="server">
         <div>
 
             <asp:Label ID="Label2" runat="server" Text="下载文件夹："></asp:Label>
-            <asp:TextBox ID="txtFolder" runat="server" Width="360px"></asp:TextBox>
+            <%--<asp:TextBox ID="txtFolder" runat="server" Width="360px"></asp:TextBox>--%>
+            <input type="text" value="C:\Users\admin\Desktop\新建文件夹 (3)\pic" id="txtFolder"/>
             <br />
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="Label1" runat="server" Text="关键词："></asp:Label>
@@ -36,7 +38,8 @@
                             </td>--%>
                             <td>
                                 <%--<%# "<asp:Button ID=\"btnDownload\" runat=\"server\" Text=\"下载\" onclick=\"downloadImg\">"%>--%>
-                                <asp:Button ID="btnDownload" runat="server" Text="下载" onlick="downloadImg('<%# Eval('goodsNo') %>')"/>
+                                <%--<asp:Button ID="btnDownload" runat="server" Text="下载" onlick="downloadImg('<%# Eval('goodsNo') %>')"/>--%>
+                                <button type="button"  onclick="downloadImg('<%# Eval("goodsNo") %>')">下载</button>
                                 <%--onlick="downloadImg('<%# Eval('goodsNo') %>')"--%> 
                                 <%--<asp:Button ID="btnDownload" runat="server" Text="下载" onlick="downloadImg('<%# Eval('goodsNo') %>')" />--%>
                             </td>
@@ -57,14 +60,15 @@
 <script type="text/javascript">
 
     function downloadImg(goodsNo) {
-        var folder = $("txtFolder").val();
+        var folder = document.getElementById("txtFolder").value.replace("\", "\\");
+
         $.ajax({
                 //要用post方式      
                 type: "Post",
                 //方法所在页面和方法名      
                 url: "SearchPage.aspx/DownloadDetail",
                 contentType: "application/json; charset=utf-8",
-                data: '{"folder":"' + folder + '" ,"goodsNo":" ' + goodsNo + '"}',
+                data: '{"folder":"' + folder + '" ,"goodsNo":"' + goodsNo + '"}',
                 dataType: "json",
                 success: function (data) {
                     if (data.d >= 1) {
