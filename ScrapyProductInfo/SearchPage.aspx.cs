@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using ScrapyProductInfo.Model.Darunfa;
 using ScrapyProductInfo.Model;
+using System.IO;
 
 namespace ScrapyProductInfo
 {
@@ -223,7 +224,7 @@ namespace ScrapyProductInfo
         }
 
         [WebMethod]
-        public static string DownloadDetail(string folder, string goodsNo)
+        public static string DownloadDetail(string folder, string goodsNo,string imgUrl,string name)
         {
             string iResult = "0";
             try
@@ -232,6 +233,27 @@ namespace ScrapyProductInfo
                 {
                     return "-1";
                 }
+
+                string realFolder = Path.Combine(folder, Utility.ReplaceWinIllegalName(name,false));
+                if (!Directory.Exists(realFolder))
+                {
+                    Directory.CreateDirectory(realFolder);
+                }
+
+                string mainIconFolder = Path.Combine(realFolder, "首页");
+                if (!Directory.Exists(mainIconFolder))
+                {
+                    Directory.CreateDirectory(mainIconFolder);
+                }
+
+                Utility.DownloadFile(mainIconFolder, imgUrl);
+
+                string detailFolder = Path.Combine(realFolder, "详细");
+                if (!Directory.Exists(detailFolder))
+                {
+                    Directory.CreateDirectory(detailFolder);
+                }
+
                 string strDetail = GetDaRunFaDetails(goodsNo);
                 string details = GetDaRunFaDetails(goodsNo);
                 var detailResult = Newtonsoft.Json.JsonConvert.DeserializeObject<Darunfa_SearchResult<Darunfa_ProductInfo_Detail_Body>>(details);
@@ -240,7 +262,7 @@ namespace ScrapyProductInfo
                     var lstImg = detailResult.body.productDetail.sm_pic_list;
                     foreach (string item in lstImg)
                     {
-                        Utility.DownloadFile(folder, item);
+                        Utility.DownloadFile(detailFolder, item);
                     }
 
                 }

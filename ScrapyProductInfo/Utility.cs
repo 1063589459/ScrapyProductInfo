@@ -100,7 +100,7 @@ namespace ScrapyProductInfo
                 if (webresponse.StatusCode == HttpStatusCode.OK)
                 {
                     System.Drawing.Image image = System.Drawing.Image.FromStream(webresponse.GetResponseStream());
-                    string filePath = Path.Combine(folder, Path.GetExtension(url));
+                    string filePath = Path.Combine(folder, Path.GetFileName(url));
                     if (File.Exists(filePath))
                     {
                         File.Delete(filePath);

@@ -39,7 +39,7 @@
                             <td>
                                 <%--<%# "<asp:Button ID=\"btnDownload\" runat=\"server\" Text=\"下载\" onclick=\"downloadImg\">"%>--%>
                                 <%--<asp:Button ID="btnDownload" runat="server" Text="下载" onlick="downloadImg('<%# Eval('goodsNo') %>')"/>--%>
-                                <button type="button"  onclick="downloadImg('<%# Eval("goodsNo") %>')">下载</button>
+                                <button type="button"  onclick="downloadImg('<%# Eval("goodsNo") %>','<%# Eval("imgUrl") %>','<%# Eval("name") %>')">下载</button>
                                 <%--onlick="downloadImg('<%# Eval('goodsNo') %>')"--%> 
                                 <%--<asp:Button ID="btnDownload" runat="server" Text="下载" onlick="downloadImg('<%# Eval('goodsNo') %>')" />--%>
                             </td>
@@ -59,8 +59,8 @@
 
 <script type="text/javascript">
 
-    function downloadImg(goodsNo) {
-        var folder = document.getElementById("txtFolder").value.replace("\", "\\");
+    function downloadImg(goodsNo,imgUrl,name) {
+        var folder = document.getElementById("txtFolder").value.replace(/\\/g, "\\\\");
 
         $.ajax({
                 //要用post方式      
@@ -68,10 +68,10 @@
                 //方法所在页面和方法名      
                 url: "SearchPage.aspx/DownloadDetail",
                 contentType: "application/json; charset=utf-8",
-                data: '{"folder":"' + folder + '" ,"goodsNo":"' + goodsNo + '"}',
+                data: '{"folder":"' + folder + '" ,"goodsNo":"' + goodsNo + '","imgUrl":"' + imgUrl + '","name":"' + name + '"}',
                 dataType: "json",
                 success: function (data) {
-                    if (data.d >= 1) {
+                    if (data.d == "1") {
                         alert("下载成功!" );
                     }
                     else {
